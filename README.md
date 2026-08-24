@@ -25,6 +25,20 @@ This project focuses on profiling and analyzing the **2020 G.C.E. Advanced Level
 - Automated HTML profiling report
 - Export of profiling summary files
 
+## Project Progress
+
+### 1. ETL - Extraction
+- Dataset `2020_al_data_kaggle_upload_new_old_syllabi.csv` successfully loaded into a pandas DataFrame (`df_extracted`).
+
+### 2. ETL - Transformation
+- Rows with null values in the crucial **Zscore** column removed.
+- **Zscore** column converted from object type to numeric (`float64`) for accurate mathematical operations.
+
+### 3. Initial Data Analysis
+- Column overview completed.
+- Average **Zscore** calculated and visualized by academic **stream** using a bar plot.
+- Descriptive statistics generated for **Zscore** (count, mean, standard deviation, min, max, quartiles).
+
 ## Project Files
 
 - `profile_data.py` – Main Python profiling script
