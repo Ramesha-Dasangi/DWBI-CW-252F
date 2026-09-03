@@ -1,0 +1,524 @@
+I am working on a university-level ETL and Data Warehouse project using the Kaggle Customer 360 dataset.
+
+Kaggle Dataset:
+https://www.kaggle.com/datasets/vinaykandimalla/customer-360
+
+I need you to complete and organize the entire ETL process based on the actual dataset and the work already completed.
+
+IMPORTANT:
+
+* Use the actual dataset structure and actual column names.
+* Do NOT invent columns, values, statistics, or results.
+* Use Python and Pandas.
+* The code must be Google Colab compatible.
+* Keep the process simple enough for a university student to explain in a viva/presentation.
+* Clearly separate each ETL stage.
+* Do not skip data profiling.
+* Do not assume columns that do not exist.
+
+
+1. DATA EXTRACTION
+
+Extract all available datasets from the Customer 360 dataset.
+
+Identify the actual CSV files available in the dataset.
+
+Possible datasets may include:
+
+* customers
+* orders
+* products
+* support tickets
+* clickstream
+
+Verify the actual filenames before using them.
+
+Load each dataset separately using Pandas.
+
+Do not modify the data during extraction.
+
+Display:
+
+* dataset name
+* number of rows
+* number of columns
+* column names
+
+==================================================
+2. DATA PROFILING
+=================
+
+Perform data profiling before preprocessing.
+
+For every dataset, identify:
+
+* number of rows
+* number of columns
+* column names
+* data types
+* missing values
+* missing-value percentage
+* duplicate rows
+* unique values
+* numerical statistics
+* categorical statistics
+* possible primary keys
+* possible foreign keys
+* date columns
+* suspicious or invalid values
+
+Create a reusable profiling function.
+
+Generate a profiling summary for all datasets.
+
+The profiling results must come from the actual data.
+
+==================================================
+3. DATA PREPROCESSING
+=====================
+
+Based on the profiling results, perform only necessary preprocessing.
+
+Possible preprocessing operations:
+
+* remove duplicate records
+* handle missing values
+* remove unnecessary spaces
+* standardize text values
+* convert data types
+* convert date columns
+* handle invalid values
+* standardize inconsistent categories
+
+Do not perform unnecessary preprocessing.
+
+For every important preprocessing decision, explain:
+
+* What was the problem?
+* What was done?
+* Why was it done?
+
+==================================================
+4. DATA TRANSFORMATION
+======================
+
+Transform the cleaned datasets into structures suitable for analytical processing.
+
+Perform appropriate transformations such as:
+
+* date standardization
+* numerical data conversion
+* categorical standardization
+* calculated fields where necessary
+* preparation of business keys
+* preparation of dimension attributes
+* preparation of fact measures
+
+Use the actual columns from the dataset.
+
+IMPORTANT:
+
+For the orders data, if the actual columns are:
+
+order_id
+customer_id
+product_id
+order_date
+quantity
+price
+total_amount
+
+then use these exact columns.
+
+Do NOT create or use a column such as `unit_price` unless it actually exists.
+
+==================================================
+5. DATA INTEGRATION
+===================
+
+Integrate the relevant datasets using their actual relationships.
+
+Identify relationships using actual keys such as:
+
+* customer_id
+* product_id
+* order_id
+* order_date
+
+Check the relationships before joining.
+
+Perform the required merges.
+
+Check:
+
+* matching records
+* unmatched records
+* duplicate relationships
+* missing keys
+* referential integrity
+
+Keep the integrated data available for data warehouse creation.
+
+==================================================
+6. DATA WAREHOUSE DESIGN
+========================
+
+Create a Star Schema based on the actual Customer 360 data.
+
+Create appropriate dimension and fact tables.
+
+At minimum, where supported by the dataset, create:
+
+Dimension Tables:
+
+* dim_customer
+* dim_product
+* dim_date
+
+Fact Table:
+
+* fact_orders
+
+If support ticket or clickstream data can be properly represented as additional fact tables, create them based on the actual dataset.
+
+Do not create unnecessary tables.
+
+Clearly explain the purpose and grain of every table.
+
+==================================================
+7. SURROGATE KEYS
+=================
+
+Create surrogate keys for dimension tables.
+
+Examples:
+
+customer_key
+product_key
+date_key
+
+Keep the original business keys:
+
+customer_id
+product_id
+
+Explain the difference between:
+
+Business Key:
+The identifier obtained from the source system.
+
+Surrogate Key:
+A warehouse-generated identifier used for dimensional relationships.
+
+Ensure all surrogate keys are:
+
+* unique
+* non-null
+
+==================================================
+8. CUSTOMER DIMENSION
+=====================
+
+Create:
+
+dim_customer
+
+Remove duplicate customer records based on the actual customer business key.
+
+Generate:
+
+customer_key
+
+Keep the relevant customer attributes.
+
+The final table should have a clear primary key.
+
+==================================================
+9. PRODUCT DIMENSION
+====================
+
+Create:
+
+dim_product
+
+Remove duplicate product records based on the actual product business key.
+
+Generate:
+
+product_key
+
+Keep the relevant product attributes.
+
+The final table should have a clear primary key.
+
+==================================================
+10. DATE DIMENSION
+==================
+
+Create:
+
+dim_date
+
+Use the actual order date range.
+
+Create a continuous date dimension.
+
+Include:
+
+* date_key
+* full_date
+* day
+* day_name
+* week
+* month
+* month_name
+* quarter
+* year
+
+Use:
+
+YYYYMMDD
+
+as the date key.
+
+==================================================
+11. SURROGATE KEY MAPPING
+=========================
+
+Map the dimension surrogate keys back to the order data.
+
+Map:
+
+customer_id → customer_key
+
+product_id → product_key
+
+order_date → date_key
+
+Ensure all mappings are correct.
+
+Check for unmatched records after mapping.
+
+==================================================
+12. FACT ORDERS
+===============
+
+Create:
+
+fact_orders
+
+The actual structure should be based on the available order columns.
+
+If the order data contains:
+
+order_id
+customer_id
+product_id
+order_date
+quantity
+price
+total_amount
+
+then the final fact table should contain:
+
+order_id
+customer_key
+product_key
+date_key
+quantity
+price
+total_amount
+
+Do not use `unit_price` unless it exists in the source.
+
+The grain of the fact table should be clearly defined.
+
+Example:
+
+"One row represents one order transaction."
+
+==================================================
+13. TOTAL AMOUNT VALIDATION
+===========================
+
+If the dataset contains:
+
+quantity
+price
+total_amount
+
+calculate:
+
+quantity × price
+
+and compare it with:
+
+total_amount
+
+Identify records where the difference is greater than an appropriate tolerance such as 0.01.
+
+Do not automatically overwrite the original total_amount.
+
+Explain any differences found.
+
+==================================================
+14. REFERENTIAL INTEGRITY VALIDATION
+====================================
+
+Validate all foreign keys.
+
+Check:
+
+customer_key → dim_customer.customer_key
+
+product_key → dim_product.product_key
+
+date_key → dim_date.date_key
+
+Report:
+
+* invalid customer keys
+* invalid product keys
+* invalid date keys
+* null foreign keys
+
+==================================================
+15. FINAL DATA VALIDATION
+=========================
+
+Perform final validation on all warehouse tables.
+
+Check:
+
+* row counts
+* duplicate primary keys
+* null primary keys
+* null foreign keys
+* invalid foreign keys
+* invalid dates
+* negative quantities
+* negative prices
+* negative total amounts
+* duplicate business keys
+* referential integrity
+
+Generate a clear validation summary.
+
+Example:
+
+Table | Rows | Null Keys | Duplicate Keys | Invalid FKs | Status
+
+Use:
+
+PASS
+or
+FAIL
+
+for the validation status.
+
+==================================================
+16. DATA WAREHOUSE EXPORT
+=========================
+
+After completing transformation, integration, warehouse creation, and validation, save the final warehouse tables.
+
+Create a data warehouse output folder.
+
+Save:
+
+dim_customer.csv
+dim_product.csv
+dim_date.csv
+fact_orders.csv
+
+Also save any other fact/dimension tables that were actually created.
+
+Do not overwrite the original raw data.
+
+==================================================
+17. FINAL ETL SUMMARY
+=====================
+
+Provide a final summary of the complete ETL process.
+
+Explain:
+
+EXTRACT
+
+* What datasets were extracted?
+
+PROFILE
+
+* What data-quality issues were identified?
+
+PREPROCESS
+
+* What preprocessing was required?
+
+TRANSFORM
+
+* What transformations were performed?
+
+INTEGRATE
+
+* How were the datasets connected?
+
+WAREHOUSE
+
+* What dimension and fact tables were created?
+
+VALIDATE
+
+* What validation checks were performed?
+
+EXPORT
+
+* Where were the final warehouse tables saved?
+
+==================================================
+18. REPORT-READY TRANSFORMATION DECISIONS
+=========================================
+
+Provide a table that can be directly included in my university report.
+
+Use this format:
+
+| Transformation | Problem Identified | Action Taken | Reason |
+| -------------- | ------------------ | ------------ | ------ |
+
+Include only transformations that were actually performed.
+
+Examples may include:
+
+* Date standardization
+* Duplicate customer removal
+* Duplicate product removal
+* Surrogate key generation
+* Date dimension creation
+* Foreign-key mapping
+* Data type conversion
+* Fact table restructuring
+* Referential integrity validation
+
+Do not include transformations that were not actually performed.
+
+==================================================
+19. FINAL OUTPUT
+================
+
+At the end, provide:
+
+1. Complete Python code
+2. Explanation of each ETL stage
+3. Actual profiling results
+4. Transformation decisions
+5. Integration explanation
+6. Star Schema explanation
+7. Dimension and fact table descriptions
+8. Validation results
+9. Data warehouse output information
+10. A concise final ETL summary
+
+The entire solution must be based on the actual Customer 360 dataset and the actual columns available.
+
+Do not invent data or results.

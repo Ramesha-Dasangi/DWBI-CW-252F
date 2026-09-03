@@ -1,0 +1,3 @@
+ticket_id,customer_key,support_status_key,issue
+201,1,1,Login problem
+202,2,2,Delivery delay

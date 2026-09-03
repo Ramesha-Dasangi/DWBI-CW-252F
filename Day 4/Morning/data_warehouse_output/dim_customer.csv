@@ -1,0 +1,4 @@
+customer_key,customer_id,name,email,age,gender
+1,1,Alice,alice@example.com,30,F
+2,2,Bob,bob@example.com,24,M
+3,3,Charlie,charlie@example.com,35,M
